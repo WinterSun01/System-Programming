@@ -38,7 +38,7 @@ namespace Processes2
                         //KillProcess();
                         break;
                     case "3":
-                        //ShowProcessInfo();
+                        ShowProcessInfo();
                         break;
                     case "4":
                         return;
@@ -61,6 +61,31 @@ namespace Processes2
             foreach (var process in allProcesses)
             {
                 Console.WriteLine($"{process.Id}\t{process.ProcessName}");
+            }
+        }
+
+        static void ShowProcessInfo()
+        {
+            Console.Clear();
+            Console.Write("Введите ID процесса: ");
+            if (int.TryParse(Console.ReadLine(), out int processId))
+            {
+                try
+                {
+                    Process process = Process.GetProcessById(processId);
+                    Console.WriteLine($"Имя процесса: {process.ProcessName}");
+                    Console.WriteLine($"ID процесса: {process.Id}");
+                    Console.WriteLine($"Время запуска: {process.StartTime}");
+                    Console.WriteLine($"Использование памяти: {process.WorkingSet64 / 1024} КБ");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Введён неверный ID процесса.");
             }
         }
     }
