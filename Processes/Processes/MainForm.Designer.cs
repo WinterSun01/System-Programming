@@ -41,15 +41,15 @@
             this.textBoxProgram.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList;
             this.textBoxProgram.Location = new System.Drawing.Point(13, 13);
             this.textBoxProgram.Name = "textBoxProgram";
-            this.textBoxProgram.Size = new System.Drawing.Size(529, 22);
+            this.textBoxProgram.Size = new System.Drawing.Size(376, 20);
             this.textBoxProgram.TabIndex = 0;
             // 
             // buttonStart
             // 
             this.buttonStart.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonStart.Location = new System.Drawing.Point(372, 123);
+            this.buttonStart.Location = new System.Drawing.Point(233, 108);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(80, 30);
+            this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 1;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -58,9 +58,9 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(462, 123);
+            this.buttonCancel.Location = new System.Drawing.Point(314, 108);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(80, 30);
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -81,16 +81,16 @@
             this.comboBoxPrograms.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.comboBoxPrograms.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.RecentlyUsedList;
             this.comboBoxPrograms.FormattingEnabled = true;
-            this.comboBoxPrograms.Location = new System.Drawing.Point(13, 42);
+            this.comboBoxPrograms.Location = new System.Drawing.Point(13, 40);
             this.comboBoxPrograms.Name = "comboBoxPrograms";
-            this.comboBoxPrograms.Size = new System.Drawing.Size(529, 24);
+            this.comboBoxPrograms.Size = new System.Drawing.Size(376, 21);
             this.comboBoxPrograms.TabIndex = 3;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 181);
+            this.ClientSize = new System.Drawing.Size(401, 143);
             this.Controls.Add(this.comboBoxPrograms);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonStart);
@@ -111,4 +111,3 @@
         private System.Windows.Forms.ComboBox comboBoxPrograms;
     }
 }
-
