@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Collections;
 
-namespace TaskManager
+namespace Task_Manager
 {
     public partial class MainForm : Form
     {
@@ -90,19 +91,19 @@ namespace TaskManager
 
         private void mainMenuFileRun_Click(object sender, EventArgs e)
         {
-            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Поиск", null, 0);
+            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Поиск", 1);
         }
 
-        [DllImport("shell32.dll", EntryPoint = "#61",  CharSet = CharSet.Unicode)]
+        [DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
         public static extern int RunFileDlg
-        (
-            [In] IntPtr hwnd,
-            [In] IntPtr icon,
-            [In] string path,
-            [In] string title,
-            [In] string prompt,
-            [In] uint flags
-        );
+            (
+                [In] IntPtr hwnd,
+                [In] IntPtr icon,
+                [In] string path,
+                [In] string title,
+                [In] string prompt,
+                [In] uint flags
+            );
 
         private void destroyToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -110,12 +111,62 @@ namespace TaskManager
                 DestroyProcess(Convert.ToInt32(listViewProcesses.SelectedItems[0].Name));
         }
 
-        private void toolStripMenuItemOpenFileLocation_Click(object sender, EventArgs e)
+        private void contextMenuProcList_Opening(object sender, CancelEventArgs e)
         {
             toolStripMenuItemOpenFileLocation.Enabled =
-            ToolStripMenuItemDestroy.Enabled =
-            listViewProcesses.SelectedItems.Count > 0;
+            toolStripMenuItemDestroy.Enabled =
+                listViewProcesses.SelectedItems.Count > 0;
         }
+
+        private void toolStripMenuItemOpenFileLocation_Click(object sender, EventArgs e)
+        {
+            string filename = processes[Convert.ToInt32(listViewProcesses.SelectedItems[0].Name)].MainModule.FileName;
+            //MessageBox.Show(this, filename, "Location", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //filename = filename.Remove(filename.LastIndexOf("\\"));
+            ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
+            //Process.Start("explorer", filename);
+        }
+        
+        [DllImport("shell32.dll")]
+        static extern IntPtr ShellExecute
+            (
+                IntPtr hwnd,
+                string lpOperation,
+                string lpFile,
+                string lpParameters,
+                string lpDirectory,
+                int nCmdShow
+            );
+
+        private void mainMenuViewTopmost_Click(object sender, EventArgs e)
+        {
+            this.TopMost = mainMenuViewTopmost.Checked;
+        }
+
+        private void mainMenuViewHide_Click(object sender, EventArgs e)
+        {
+            mainMenuViewHide.Checked = !mainMenuViewHide.Checked;
+
+            if (mainMenuViewHide.Checked)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+        }
+        //новый обработчик для сворачивания окна
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (this.WindowState == FormWindowState.Minimized && mainMenuViewHide.Checked)
+            {
+                this.Hide();
+            }
+        }
+
+        
+
     }
-    
 }

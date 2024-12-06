@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{478E1FF3-0C3E-47E7-B2BB-07B4E21BD6EF}</ProjectGuid>
+    <ProjectGuid>{0AFA86C8-20D3-4389-91E9-366441E031A6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>TaskManager</RootNamespace>
-    <AssemblyName>TaskManager</AssemblyName>
+    <RootNamespace>Task_Manager</RootNamespace>
+    <AssemblyName>Task_Manager</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
