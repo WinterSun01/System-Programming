@@ -9,36 +9,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Collections;
+using Task_Manager;
 
-namespace Task_Manager
+namespace TaskManager
 {
     public partial class MainForm : Form
     {
         Dictionary<int, Process> processes;
+        ListViewColumnSorter lvColumnSorter;
         public MainForm()
         {
             InitializeComponent();
             LoadProcesses();
+            foreach (ColumnHeader ch in this.listViewProcesses.Columns)
+            {
+                ch.Width = -2;
+            }
+
+            lvColumnSorter = new ListViewColumnSorter();
+            listViewProcesses.ListViewItemSorter = lvColumnSorter;
         }
 
         void LoadProcesses()
         {
             processes = Process.GetProcesses().ToDictionary(i => i.Id);
-            //for (int i = 0; i < processes.Count; i++)
-            //{
-            //	//listViewProcesses.Items
-            //	//	.Add(processes[i]).SubItems
-            //	//	.Add(processes[i].ProcessName);
-            //}
+
             foreach (KeyValuePair<int, Process> p in processes)
             {
-                //listViewProcesses.Items.Add(p.Key.ToString()).SubItems.Add(p.Value.ProcessName);
-                //----------------------
-                //ListViewItem item = new ListViewItem();
-                //item.Name = item.Text = p.Key.ToString();
-                //item.SubItems.Add(p.Value.ProcessName);
-                //listViewProcesses.Items.Add(item);
                 AddProcessToListView(p.Value);
             }
         }
@@ -48,8 +45,6 @@ namespace Task_Manager
             {
                 if (!listViewProcesses.Items.ContainsKey(p.Key.ToString()))
                 {
-                    //listViewProcesses.Items.Add(p.Key.ToString()).SubItems.Add(p.Value.ProcessName);
-                    //------------------------------
                     AddProcessToListView(p.Value);
                 }
             }
@@ -57,8 +52,10 @@ namespace Task_Manager
         void AddProcessToListView(Process p)
         {
             ListViewItem item = new ListViewItem();
-            item.Name = item.Text = p.Id.ToString();
-            item.SubItems.Add(p.ProcessName);
+            item.Name = p.Id.ToString();
+            item.Text = p.ProcessName;
+            //item.Name = item.Text = p.Id.ToString();
+            item.SubItems.Add(p.Id.ToString());
             listViewProcesses.Items.Add(item);
         }
         void RemoveOldProcesses()
@@ -66,7 +63,7 @@ namespace Task_Manager
             foreach (ListViewItem i in listViewProcesses.Items)
             {
                 //if (processes[Convert.ToInt32(i.SubItems[0].Text)])
-                if (!processes.ContainsKey(Convert.ToInt32(i.SubItems[0].Text)))
+                if (!processes.ContainsKey(Convert.ToInt32(i.SubItems[1].Text)))
                 {
                     listViewProcesses.Items.Remove(i);
                 }
@@ -93,7 +90,7 @@ namespace Task_Manager
         {
             RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Поиск", 1);
         }
-
+        
         [DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
         public static extern int RunFileDlg
             (
@@ -138,35 +135,21 @@ namespace Task_Manager
                 int nCmdShow
             );
 
-        private void mainMenuViewTopmost_Click(object sender, EventArgs e)
+        private void listViewProcesses_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            this.TopMost = mainMenuViewTopmost.Checked;
-        }
-
-        private void mainMenuViewHide_Click(object sender, EventArgs e)
-        {
-            mainMenuViewHide.Checked = !mainMenuViewHide.Checked;
-
-            if (mainMenuViewHide.Checked)
+            if (e.Column == lvColumnSorter.SortColumn)
             {
-                this.WindowState = FormWindowState.Minimized;
+                if (lvColumnSorter.Order == SortOrder.Ascending)
+                    lvColumnSorter.Order = SortOrder.Descending;
+                else
+                    lvColumnSorter.Order = SortOrder.Ascending;
             }
             else
             {
-                this.WindowState = FormWindowState.Minimized;
+                lvColumnSorter.SortColumn = e.Column;
+                lvColumnSorter.Order = SortOrder.Ascending;
             }
+            this.listViewProcesses.Sort();
         }
-        //новый обработчик для сворачивания окна
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-            if (this.WindowState == FormWindowState.Minimized && mainMenuViewHide.Checked)
-            {
-                this.Hide();
-            }
-        }
-
-        
-
     }
 }
