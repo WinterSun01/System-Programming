@@ -20,6 +20,7 @@ namespace TaskManager
         public MainForm()
         {
             InitializeComponent();
+            InitializeNotifyIcon();
             LoadProcesses();
             foreach (ColumnHeader ch in this.listViewProcesses.Columns)
             {
@@ -150,6 +151,48 @@ namespace TaskManager
                 lvColumnSorter.Order = SortOrder.Ascending;
             }
             this.listViewProcesses.Sort();
+        }
+
+        private void mainMenuViewTopmost_Click(object sender, EventArgs e)
+        {
+            this.TopMost = mainMenuViewTopmost.Checked;
+        }
+
+        private void mainMenuViewHide_Click(object sender, EventArgs e)
+        {
+            if (mainMenuViewHide.Checked)
+            {
+                this.SizeChanged += MainForm_SizeChanged;
+            }
+            else
+            {
+                this.SizeChanged -= MainForm_SizeChanged;
+            }
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized && mainMenuViewHide.Checked)
+            {
+                this.Hide();
+                this.notifyIcon.Visible = true;
+            }
+        }
+
+        private void InitializeNotifyIcon()
+        {
+            this.notifyIcon = new NotifyIcon(this.components)
+            {
+                Text = "TaskManagerPD_311",
+                Icon = System.Drawing.SystemIcons.Application,
+                Visible = false
+            };
+            this.notifyIcon.Click += (s, ev) =>
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.notifyIcon.Visible = false;
+            };
         }
     }
 }
