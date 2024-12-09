@@ -23,15 +23,40 @@ namespace TaskManager
             InitializeComponent();
             InitializeNotifyIcon();
             LoadProcesses();
+            
+
+            lvColumnSorter = new ListViewColumnSorter();
+            listViewProcesses.ListViewItemSorter = lvColumnSorter;
+            AllocConsole();
+        }
+        void SetColumns()
+        {
+            listViewProcesses.Columns.Clear();
+            listViewProcesses.Columns.Add("Name");
+            //Console.WriteLine(listViewProcesses.Items[0].SubItems["PID"].Name);
+            if (mainMenuViewSelectColumnsPID.Checked) listViewProcesses.Columns.Add("PID");
+            if (mainMenuViewSelectColumnsOwner.Checked) listViewProcesses.Columns.Add("Owner");
+            if (mainMenuViewSelectColumnsPath.Checked) listViewProcesses.Columns.Add("Path");
+            
+            AdjustColumnsWidth();
+        }
+        void AdjustColumnsWidth()
+        {
             foreach (ColumnHeader ch in this.listViewProcesses.Columns)
             {
                 ch.Width = -2;
             }
-
-            lvColumnSorter = new ListViewColumnSorter();
-            listViewProcesses.ListViewItemSorter = lvColumnSorter;
         }
-
+        [DllImport("kernel32.dll")]
+        static extern bool AllocConsole();
+        int GetColumnIndex(string name)
+        {
+            for(int i = 0; i < listViewProcesses.Columns.Count;  i++)
+            {
+                if (listViewProcesses.Columns[i].Text == name) return i;
+            }
+            return -1;
+        }
         void LoadProcesses()
         {
             processes = Process.GetProcesses().ToDictionary(i => i.Id);
@@ -96,6 +121,7 @@ namespace TaskManager
         {
             RefreshProcesses();
             toolStripStatusLabelProcessCount.Text = $"Processes count: {listViewProcesses.Items.Count.ToString()}";
+            //SetColumns();
         }
 
         private void mainMenuFileRun_Click(object sender, EventArgs e)

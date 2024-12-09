@@ -62,6 +62,9 @@ namespace TaskManager
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.columnFilepath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnOwner = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mainMenuViewSelectColumnsPID = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMenuViewSelectColumnsOwner = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMenuViewSelectColumnsPath = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -77,7 +80,7 @@ namespace TaskManager
             this.viewToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(1067, 30);
+            this.mainMenu.Size = new System.Drawing.Size(1067, 28);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -88,7 +91,7 @@ namespace TaskManager
             this.toolStripSeparator1,
             this.mainMenuFileExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // mainMenuFileRun
@@ -120,7 +123,7 @@ namespace TaskManager
             this.mainMenuViewRefresh,
             this.mainMenuViewRefreshRate});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // mainMenuViewTopmost
@@ -146,6 +149,10 @@ namespace TaskManager
             // 
             // mainMenuViewColumns
             // 
+            this.mainMenuViewColumns.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainMenuViewSelectColumnsPID,
+            this.mainMenuViewSelectColumnsOwner,
+            this.mainMenuViewSelectColumnsPath});
             this.mainMenuViewColumns.Name = "mainMenuViewColumns";
             this.mainMenuViewColumns.Size = new System.Drawing.Size(237, 26);
             this.mainMenuViewColumns.Text = "Select columns";
@@ -212,11 +219,11 @@ namespace TaskManager
             this.tabControl.Controls.Add(this.tabPageProcesses);
             this.tabControl.Controls.Add(this.tabPagePerformance);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 30);
+            this.tabControl.Location = new System.Drawing.Point(0, 28);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1067, 498);
+            this.tabControl.Size = new System.Drawing.Size(1067, 500);
             this.tabControl.TabIndex = 2;
             // 
             // tabPageProcesses
@@ -226,7 +233,7 @@ namespace TaskManager
             this.tabPageProcesses.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageProcesses.Name = "tabPageProcesses";
             this.tabPageProcesses.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPageProcesses.Size = new System.Drawing.Size(1059, 469);
+            this.tabPageProcesses.Size = new System.Drawing.Size(1059, 471);
             this.tabPageProcesses.TabIndex = 0;
             this.tabPageProcesses.Text = "Processes";
             this.tabPageProcesses.UseVisualStyleBackColor = true;
@@ -247,7 +254,7 @@ namespace TaskManager
             this.listViewProcesses.Margin = new System.Windows.Forms.Padding(4);
             this.listViewProcesses.MultiSelect = false;
             this.listViewProcesses.Name = "listViewProcesses";
-            this.listViewProcesses.Size = new System.Drawing.Size(1051, 461);
+            this.listViewProcesses.Size = new System.Drawing.Size(1051, 463);
             this.listViewProcesses.TabIndex = 0;
             this.listViewProcesses.UseCompatibleStateImageBehavior = false;
             this.listViewProcesses.View = System.Windows.Forms.View.Details;
@@ -316,6 +323,27 @@ namespace TaskManager
             // 
             this.columnOwner.Text = "Owner";
             // 
+            // mainMenuViewSelectColumnsPID
+            // 
+            this.mainMenuViewSelectColumnsPID.CheckOnClick = true;
+            this.mainMenuViewSelectColumnsPID.Name = "mainMenuViewSelectColumnsPID";
+            this.mainMenuViewSelectColumnsPID.Size = new System.Drawing.Size(224, 26);
+            this.mainMenuViewSelectColumnsPID.Text = "PID";
+            // 
+            // mainMenuViewSelectColumnsOwner
+            // 
+            this.mainMenuViewSelectColumnsOwner.CheckOnClick = true;
+            this.mainMenuViewSelectColumnsOwner.Name = "mainMenuViewSelectColumnsOwner";
+            this.mainMenuViewSelectColumnsOwner.Size = new System.Drawing.Size(224, 26);
+            this.mainMenuViewSelectColumnsOwner.Text = "Owner";
+            // 
+            // mainMenuViewSelectColumnsPath
+            // 
+            this.mainMenuViewSelectColumnsPath.CheckOnClick = true;
+            this.mainMenuViewSelectColumnsPath.Name = "mainMenuViewSelectColumnsPath";
+            this.mainMenuViewSelectColumnsPath.Size = new System.Drawing.Size(224, 26);
+            this.mainMenuViewSelectColumnsPath.Text = "Path";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -374,5 +402,8 @@ namespace TaskManager
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private ColumnHeader columnFilepath;
         private ColumnHeader columnOwner;
+        private ToolStripMenuItem mainMenuViewSelectColumnsPID;
+        private ToolStripMenuItem mainMenuViewSelectColumnsOwner;
+        private ToolStripMenuItem mainMenuViewSelectColumnsPath;
     }
 }
