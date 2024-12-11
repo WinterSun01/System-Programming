@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Task_Manager;
 using System.Security.Principal;
+using Task_Manager;
 
 namespace TaskManager
 {
@@ -18,40 +18,65 @@ namespace TaskManager
     {
         Dictionary<int, Process> processes;
         ListViewColumnSorter lvColumnSorter;
+
+        Dictionary<string, bool> selectedColumns = new Dictionary<string, bool>();
+
         public MainForm()
         {
             InitializeComponent();
-            InitializeNotifyIcon();
             LoadProcesses();
-            
+
 
             lvColumnSorter = new ListViewColumnSorter();
             listViewProcesses.ListViewItemSorter = lvColumnSorter;
-            AllocConsole();
-        }
-        void SetColumns()
-        {
-            listViewProcesses.Columns.Clear();
-            listViewProcesses.Columns.Add("Name");
-            //Console.WriteLine(listViewProcesses.Items[0].SubItems["PID"].Name);
-            if (mainMenuViewSelectColumnsPID.Checked) listViewProcesses.Columns.Add("PID");
-            if (mainMenuViewSelectColumnsOwner.Checked) listViewProcesses.Columns.Add("Owner");
-            if (mainMenuViewSelectColumnsPath.Checked) listViewProcesses.Columns.Add("Path");
-            
+
             AdjustColumnsWidth();
+
+            AllocConsole();
+            InitSelectedColumns();
         }
+        void InitSelectedColumns()
+        {
+            foreach (ToolStripMenuItem i in mainMenuViewColumns.DropDownItems)
+            {
+                selectedColumns[i.Text] = i.Checked;
+            }
+            PrintSelectedColumns();
+        }
+        void SetColumnsVisibility()
+        {
+            AdjustColumnsWidth();
+            for (int i = 1; i < listViewProcesses.Columns.Count; i++)
+            {
+                if (selectedColumns[listViewProcesses.Columns[i].Text] == false)
+                    listViewProcesses.Columns[i].Width = 0;
+            }
+        }
+        //void SetColumns()
+        //{
+        //	listViewProcesses.Columns.Clear();
+        //	listViewProcesses.Columns.Add("Name");
+        //	//Console.WriteLine(listViewProcesses.Items[0].SubItems["PID"].Name);
+        //	if (mainMenuViewSelectColumnsPID.Checked) listViewProcesses.Columns.Add("PID");
+        //	if (mainMenuViewSelectColumnsOwner.Checked) listViewProcesses.Columns.Add("Owner");
+        //	if (mainMenuViewSelectColumnsPath.Checked) listViewProcesses.Columns.Add("Path");
+
+        //	AdjustColumnsWidth();
+        //}
         void AdjustColumnsWidth()
         {
             foreach (ColumnHeader ch in this.listViewProcesses.Columns)
             {
-                ch.Width = -2;
+                //https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column#:~:text=foreach%20(ColumnHeader%20ch%20in%20this.listView1.Columns)%0A%7B%0A%20%20%20%20ch.Width%20%3D%20%2D2%3B%0A%7D
+                //https://stackoverflow.com/questions/1257500/c-sharp-listview-column-width-auto
+                ch.Width = -1;//????
             }
         }
         [DllImport("kernel32.dll")]
         static extern bool AllocConsole();
         int GetColumnIndex(string name)
         {
-            for(int i = 0; i < listViewProcesses.Columns.Count;  i++)
+            for (int i = 0; i < listViewProcesses.Columns.Count; i++)
             {
                 if (listViewProcesses.Columns[i].Text == name) return i;
             }
@@ -60,9 +85,20 @@ namespace TaskManager
         void LoadProcesses()
         {
             processes = Process.GetProcesses().ToDictionary(i => i.Id);
-
+            //for (int i = 0; i < processes.Count; i++)
+            //{
+            //	//listViewProcesses.Items
+            //	//	.Add(processes[i]).SubItems
+            //	//	.Add(processes[i].ProcessName);
+            //}
             foreach (KeyValuePair<int, Process> p in processes)
             {
+                //listViewProcesses.Items.Add(p.Key.ToString()).SubItems.Add(p.Value.ProcessName);
+                //----------------------
+                //ListViewItem item = new ListViewItem();
+                //item.Name = item.Text = p.Key.ToString();
+                //item.SubItems.Add(p.Value.ProcessName);
+                //listViewProcesses.Items.Add(item);
                 AddProcessToListView(p.Value);
             }
         }
@@ -72,6 +108,8 @@ namespace TaskManager
             {
                 if (!listViewProcesses.Items.ContainsKey(p.Key.ToString()))
                 {
+                    //listViewProcesses.Items.Add(p.Key.ToString()).SubItems.Add(p.Value.ProcessName);
+                    //------------------------------
                     AddProcessToListView(p.Value);
                 }
             }
@@ -111,6 +149,12 @@ namespace TaskManager
             processes = Process.GetProcesses().ToDictionary(i => i.Id);
             RemoveOldProcesses();
             AddNewProcesses();
+            //foreach (ColumnHeader ch in this.listViewProcesses.Columns)
+            //{
+            //	//https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column#:~:text=foreach%20(ColumnHeader%20ch%20in%20this.listView1.Columns)%0A%7B%0A%20%20%20%20ch.Width%20%3D%20%2D2%3B%0A%7D
+            //	//https://stackoverflow.com/questions/1257500/c-sharp-listview-column-width-auto
+            //	ch.Width = -2;//????
+            //}
         }
         void DestroyProcess(int pid)
         {
@@ -126,9 +170,9 @@ namespace TaskManager
 
         private void mainMenuFileRun_Click(object sender, EventArgs e)
         {
-            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Поиск", 1);
+            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Task manager! Привет от PD_311 ;-)", 1);
         }
-        
+        //https://stackoverflow.com/questions/9331088/how-to-start-windows-run-dialog-from-c-sharp
         [DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
         public static extern int RunFileDlg
             (
@@ -161,7 +205,8 @@ namespace TaskManager
             ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
             //Process.Start("explorer", filename);
         }
-        
+        //https://stackoverflow.com/questions/1746079/how-can-i-open-windows-explorer-to-a-certain-directory-from-within-a-wpf-app
+        //https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
         [DllImport("shell32.dll")]
         static extern IntPtr ShellExecute
             (
@@ -190,9 +235,10 @@ namespace TaskManager
             this.listViewProcesses.Sort();
         }
 
+        //Process owner:
+        //https://stackoverflow.com/questions/777548/how-do-i-determine-the-owner-of-a-process-in-c
         [DllImport("advapi32.dll", SetLastError = true)]
-
-        static extern bool OpenProcessToken(IntPtr handle, uint DesiredAcces, out IntPtr TokenHandle);
+        static extern bool OpenProcessToken(IntPtr handle, uint DesiredAccess, out IntPtr TokenHandle);
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool CloseHandle(IntPtr hObject);
@@ -210,50 +256,35 @@ namespace TaskManager
             }
             catch (Win32Exception ex)
             {
-                
+
             }
             return username;
         }
-        private void mainMenuViewTopmost_Click(object sender, EventArgs e)
+        void PrintSelectedColumns()
         {
-            this.TopMost = mainMenuViewTopmost.Checked;
+            foreach (KeyValuePair<string, bool> p in selectedColumns)
+            {
+                Console.WriteLine(p.Key + "\t" + p.Value);
+            }
+            Console.WriteLine("\n------------------------------------\n");
+        }
+        private void mainMenuViewSelectColumns_Click(object sender, EventArgs e)
+        {
+            selectedColumns[(sender as ToolStripMenuItem).Text] = (sender as ToolStripMenuItem).Checked;
+            PrintSelectedColumns();
+            SetColumnsVisibility();
         }
 
-        private void mainMenuViewHide_Click(object sender, EventArgs e)
-        {
-            if (mainMenuViewHide.Checked)
-            {
-                this.SizeChanged += MainForm_SizeChanged;
-            }
-            else
-            {
-                this.SizeChanged -= MainForm_SizeChanged;
-            }
-        }
+        //private void mainMenuViewSelectColumnsOwner_Click(object sender, EventArgs e)
+        //{
+        //	selectedColumns[(sender as ToolStripMenuItem).Text] = (sender as ToolStripMenuItem).Checked;
+        //	PrintSelectedColumns();
+        //}
 
-        private void MainForm_SizeChanged(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized && mainMenuViewHide.Checked)
-            {
-                this.Hide();
-                this.notifyIcon.Visible = true;
-            }
-        }
-
-        private void InitializeNotifyIcon()
-        {
-            this.notifyIcon = new NotifyIcon(this.components)
-            {
-                Text = "TaskManagerPD_311",
-                Icon = System.Drawing.SystemIcons.Application,
-                Visible = false
-            };
-            this.notifyIcon.Click += (s, ev) =>
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.notifyIcon.Visible = false;
-            };
-        }
+        //private void mainMenuViewSelectColumnsPath_Click(object sender, EventArgs e)
+        //{
+        //	selectedColumns[(sender as ToolStripMenuItem).Text] = (sender as ToolStripMenuItem).Checked;
+        //	PrintSelectedColumns();
+        //}
     }
 }
