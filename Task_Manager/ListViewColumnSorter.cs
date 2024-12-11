@@ -8,12 +8,12 @@ using System.Collections;
 
 namespace Task_Manager
 {
-    internal class ListViewColumnSorter:IComparer
+    internal class ListViewColumnSorter : IComparer
     {
         //int columnToSort;
         //SortOrder orderOfSort;
         CaseInsensitiveComparer objectCompare;
-        public int SortColumn {  get; set; }
+        public int SortColumn { get; set; }
         //{
         //    get => columnToSort;
         //    set => columnToSort = value;
@@ -45,7 +45,7 @@ namespace Task_Manager
                     Convert.ToDouble(listViewY.SubItems[SortColumn].Text)
                     );
             }
-            else 
+            else
             {
                 compareResult =
                 objectCompare.Compare
@@ -60,7 +60,7 @@ namespace Task_Manager
             else if (Order == SortOrder.Descending)
                 return -compareResult;
             //else
-                return compareResult;
+            return compareResult;
         }
     }
 }

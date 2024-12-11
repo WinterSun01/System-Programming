@@ -67,9 +67,7 @@ namespace TaskManager
         {
             foreach (ColumnHeader ch in this.listViewProcesses.Columns)
             {
-                //https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column#:~:text=foreach%20(ColumnHeader%20ch%20in%20this.listView1.Columns)%0A%7B%0A%20%20%20%20ch.Width%20%3D%20%2D2%3B%0A%7D
-                //https://stackoverflow.com/questions/1257500/c-sharp-listview-column-width-auto
-                ch.Width = -1;//????
+                ch.Width = -1;
             }
         }
         [DllImport("kernel32.dll")]
@@ -151,9 +149,7 @@ namespace TaskManager
             AddNewProcesses();
             //foreach (ColumnHeader ch in this.listViewProcesses.Columns)
             //{
-            //	//https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column#:~:text=foreach%20(ColumnHeader%20ch%20in%20this.listView1.Columns)%0A%7B%0A%20%20%20%20ch.Width%20%3D%20%2D2%3B%0A%7D
-            //	//https://stackoverflow.com/questions/1257500/c-sharp-listview-column-width-auto
-            //	ch.Width = -2;//????
+            //	ch.Width = -2;
             //}
         }
         void DestroyProcess(int pid)
@@ -170,9 +166,8 @@ namespace TaskManager
 
         private void mainMenuFileRun_Click(object sender, EventArgs e)
         {
-            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Task manager! Привет от PD_311 ;-)", 1);
+            RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", "Run PD_311", "Поиск", 1);
         }
-        //https://stackoverflow.com/questions/9331088/how-to-start-windows-run-dialog-from-c-sharp
         [DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
         public static extern int RunFileDlg
             (
@@ -205,8 +200,6 @@ namespace TaskManager
             ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
             //Process.Start("explorer", filename);
         }
-        //https://stackoverflow.com/questions/1746079/how-can-i-open-windows-explorer-to-a-certain-directory-from-within-a-wpf-app
-        //https://learn.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shellexecutea
         [DllImport("shell32.dll")]
         static extern IntPtr ShellExecute
             (
@@ -236,7 +229,6 @@ namespace TaskManager
         }
 
         //Process owner:
-        //https://stackoverflow.com/questions/777548/how-do-i-determine-the-owner-of-a-process-in-c
         [DllImport("advapi32.dll", SetLastError = true)]
         static extern bool OpenProcessToken(IntPtr handle, uint DesiredAccess, out IntPtr TokenHandle);
         [DllImport("kernel32.dll", SetLastError = true)]
